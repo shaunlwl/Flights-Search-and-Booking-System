@@ -14,14 +14,14 @@ def LoadInitialData(airlines_list, aircraft_type_list, scheduled_flights):
   QF.setAircraftType(aircraft_type_list[0])
 
   #Load Flights
-  scheduled_flights.append(flights("SQ", "123","SIN", "NRT", dt.datetime.strptime("5 Dec 22, 10:00AM", '%d %b %y, %I:%M%p'), 6.5, 3, "Boeing 747", {"F": 2000, "J": 1000, "Y":500}, "321"))
-  scheduled_flights.append(flights("SQ", "456","SYD", "SIN", dt.datetime.strptime("4 Dec 22, 10:00PM", '%d %b %y, %I:%M%p'), 8, 2, "Boeing 747", {"F": 1500, "J": 750, "Y":300}, "654"))
-  scheduled_flights.append(flights("SQ", "789","SYD", "NRT", dt.datetime.strptime("5 Dec 22, 09:00AM", '%d %b %y, %I:%M%p'), 14, 2, "Boeing 747", {"F": 3500, "J": 2500, "Y":1500}, "987"))
-  scheduled_flights.append(flights("QF", "789","SYD", "NRT", dt.datetime.strptime("5 Dec 22, 01:00PM", '%d %b %y, %I:%M%p'), 14.5, 2, "Boeing 747", {"F": 3200, "J": 2200, "Y":1200}, "987"))
-  scheduled_flights.append(flights("SQ", "123","SIN", "NRT", dt.datetime.strptime("12 Dec 22, 10:00AM", '%d %b %y, %I:%M%p'), 6.5, 3, "Boeing 747", {"F": 2000, "J": 1000, "Y":500}, "321"))
-  scheduled_flights.append(flights("SQ", "456","SYD", "SIN", dt.datetime.strptime("11 Dec 22, 10:00PM", '%d %b %y, %I:%M%p'), 8, 2, "Boeing 747", {"F": 1500, "J": 750, "Y":300}, "654"))
-  scheduled_flights.append(flights("SQ", "789","SYD", "NRT", dt.datetime.strptime("12 Dec 22, 09:00AM", '%d %b %y, %I:%M%p'), 14, 2, "Boeing 747", {"F": 3500, "J": 2500, "Y":1500}, "987"))
-  scheduled_flights.append(flights("QF", "789","SYD", "NRT", dt.datetime.strptime("12 Dec 22, 01:00PM", '%d %b %y, %I:%M%p'), 14.5, 2, "Boeing 747", {"F": 3200, "J": 2200, "Y":1200}, "987"))
+  scheduled_flights.append(flights("SQ", 123,"SIN", "NRT", dt.datetime.strptime("5 Dec 22, 10:00AM", '%d %b %y, %I:%M%p'), 6.5, 3, aircraft_type_list[0], {"F": 2000, "J": 1000, "Y":500}, 321))
+  scheduled_flights.append(flights("SQ", 456,"SYD", "SIN", dt.datetime.strptime("4 Dec 22, 10:00PM", '%d %b %y, %I:%M%p'), 8, 2, aircraft_type_list[0], {"F": 1500, "J": 750, "Y":300}, 654))
+  scheduled_flights.append(flights("SQ", 789,"SYD", "NRT", dt.datetime.strptime("5 Dec 22, 09:00AM", '%d %b %y, %I:%M%p'), 14, 2, aircraft_type_list[0], {"F": 3500, "J": 2500, "Y":1500}, 987))
+  scheduled_flights.append(flights("QF", 789,"SYD", "NRT", dt.datetime.strptime("5 Dec 22, 01:00PM", '%d %b %y, %I:%M%p'), 14.5, 2, aircraft_type_list[0], {"F": 3200, "J": 2200, "Y":1200}, 987))
+  scheduled_flights.append(flights("SQ", 123,"SIN", "NRT", dt.datetime.strptime("12 Dec 22, 10:00AM", '%d %b %y, %I:%M%p'), 6.5, 3, aircraft_type_list[0], {"F": 2000, "J": 1000, "Y":500}, 321))
+  scheduled_flights.append(flights("SQ", 456,"SYD", "SIN", dt.datetime.strptime("11 Dec 22, 10:00PM", '%d %b %y, %I:%M%p'), 8, 2, aircraft_type_list[0], {"F": 1500, "J": 750, "Y":300}, 654))
+  scheduled_flights.append(flights("SQ", 789,"SYD", "NRT", dt.datetime.strptime("12 Dec 22, 09:00AM", '%d %b %y, %I:%M%p'), 14, 2, aircraft_type_list[0], {"F": 3500, "J": 2500, "Y":1500}, 987))
+  scheduled_flights.append(flights("QF", 789,"SYD", "NRT", dt.datetime.strptime("12 Dec 22, 01:00PM", '%d %b %y, %I:%M%p'), 14.5, 2, aircraft_type_list[0], {"F": 3200, "J": 2200, "Y":1200}, 987))
   
   return airlines_list, aircraft_type_list, scheduled_flights 
 
@@ -30,6 +30,163 @@ def LoadInitialData(airlines_list, aircraft_type_list, scheduled_flights):
 def createAirline(name, IATA_code, airlines_list):
   airlines_list.append(airlines(name, IATA_code))
 
+def inputValidationforCreateFlight(input_list, airlines_list, aircraft_type_list, scheduled_flights):
+  
+  airline_exist = False
+  aircraft_type_exist = False
+  flight_exist = False
+
+  for i in range(0, len(input_list)):
+    input_list[i] = input_list[i].strip()
+
+  if len(input_list) == 9:
+    
+    for items in airlines_list:
+      if input_list[0].lower() == items.getIATA().lower():
+        airline_exist = True
+        break
+
+    for items in aircraft_type_list:
+      if input_list[8].lower() == items.getName().lower():
+        aircraft_type_exist = True
+        break
+
+    if airline_exist == False and aircraft_type_exist == False:
+      print("\nNo such Airline and Aircraft Type in the system, Please try again")
+    
+    elif airline_exist == False and aircraft_type_exist == True:
+      print("\nNo such Airline in the system, Please try again")
+
+    elif airline_exist == True and aircraft_type_exist == False:
+      print("\nNo such Aircraft Type in the system, Please try again")
+    
+    else:
+      try:
+        
+        input_list[1] = int(input_list[1])
+      
+      except ValueError:
+        print("\nERROR: Outbound Flight Number is not in numerical digits, Please try again\n")
+      
+      else:
+        try:
+        
+          input_list[4] = input_list[4].strip() + ", " + input_list[5].strip()
+          input_list[4] = dt.datetime.strptime(input_list[4], '%d %b %y, %I:%M %p')
+
+        except ValueError:
+          print("\nERROR: Departure Date/time not in required format, Please try again\n")
+
+        else:
+          
+          for items in scheduled_flights:
+            if input_list[1] == items.getOutbound() and input_list[0].lower() == items.getIATA().lower() and input_list[4] == items.getDepartureDateTime():
+              flight_exist = True
+              break
+        
+          if flight_exist == True:
+            print("\nFlight {} {} on {} is already scheduled in the system".format(input_list[0].upper(), input_list[1], input_list[4]))
+          
+          else:
+            flight_hours = input_list[6].split(" ")
+            stopover_hours = input_list[7].split(" ")
+            
+            if len(flight_hours) != 4 or len(stopover_hours) != 2:
+              print("\nERROR: Flight Time or Stopover Duration not in required format, Please try again\n")
+ 
+            for i in range(0,len(flight_hours)):
+              flight_hours[i] = flight_hours[i].strip()
+            
+            for i in range(0,len(stopover_hours)):
+              stopover_hours[i] = stopover_hours[i].strip()
+
+            try:
+              flight_time = int(flight_hours[0]) + float(int(flight_hours[2])/60)
+              stopover_time = float(stopover_hours[0])
+
+            except ValueError:
+              print("\nFlight Time or Stopover Duration not in numerical form as required, Please try again\n")
+
+            else:
+
+              return True
+
+
+  elif len(input_list) == 10:
+    for items in airlines_list:
+      if input_list[0].lower() == items.getIATA().lower():
+        airline_exist = True
+        break
+
+    for items in aircraft_type_list:
+      if input_list[9].lower() == items.getName().lower():
+        aircraft_type_exist = True
+        break
+
+    if airline_exist == False and aircraft_type_exist == False:
+      print("\nNo such Airline and Aircraft Type in the system, Please try again")
+    
+    elif airline_exist == False and aircraft_type_exist == True:
+      print("\nNo such Airline in the system, Please try again")
+
+    elif airline_exist == True and aircraft_type_exist == False:
+      print("\nNo such Aircraft Type in the system, Please try again")
+
+    else:
+      try:
+        
+        input_list[1] = int(input_list[1])
+        input_list[2] = int(input_list[2])
+      
+      except ValueError:
+        print("\nERROR: Outbound Flight Number or Return Flight Number is not in numerical digits, Please try again\n")
+      
+      else:
+        try:
+        
+          input_list[5] = input_list[5].strip() + ", " + input_list[6].strip()
+          input_list[5] = dt.datetime.strptime(input_list[5], '%d %b %y, %I:%M %p')
+
+        except ValueError:
+          print("\nERROR: Departure Date/time not in required format, Please try again\n")
+
+        else:
+          
+          for items in scheduled_flights:
+            if input_list[1] == items.getOutbound() and input_list[0].lower() == items.getIATA().lower() and input_list[5] == items.getDepartureDateTime():
+              flight_exist = True
+              break
+        
+          if flight_exist == True:
+            print("\nFlight {} {} on {} is already scheduled in the system".format(input_list[0].upper(), input_list[1], input_list[5]))
+          
+          else:
+            flight_hours = input_list[7].strip().split(" ")
+            stopover_hours = input_list[8].strip().split(" ")
+            
+            if len(flight_hours) != 4 or len(stopover_hours) != 2:
+              print("\nERROR: Flight Time or Stopover Duration not in required format, Please try again\n")
+ 
+            for i in range(0,len(flight_hours)):
+              flight_hours[i] = flight_hours[i].strip()
+            
+            for i in range(0,len(stopover_hours)):
+              stopover_hours[i] = stopover_hours[i].strip()
+
+            try:
+              flight_time = int(flight_hours[0]) + float(int(flight_hours[2])/60)
+              stopover_time = float(stopover_hours[0])
+
+            except ValueError:
+              print("\nFlight Time or Stopover Duration not in numerical form as required, Please try again\n")
+
+            else:
+              
+              return True
+
+  
+  else:
+    print("\nERROR: Unexpected number of inputs, Please Try again\n")
 
 
 #Airlines Class
@@ -81,7 +238,7 @@ class aircraft_type:
       for i in range(0,len(list(seat_config.keys()))): #Choose the cabin class
         
         
-        seat_arrangement = seat_config[list(seat_config.keys())[i]].split("-")    #[1,1,1]
+        seat_arrangement = seat_config[list(seat_config.keys())[i]].split("-") 
         row_number = seat_start_end[list(seat_start_end.keys())[i]][0]
         
         while row_number <= seat_start_end[list(seat_start_end.keys())[i]][1]:
@@ -150,6 +307,7 @@ class flights:
     self._stopover_dur = stopover_dur
     self._fare_armount = fare_amount
     self._aircraft_type = aircarft_type
+    self._booked_seats = []
     
   
   def getIATA(self):
@@ -212,6 +370,9 @@ class flights:
 
   def setFareAmount(self, fare_amount):
     self._fare_armount = fare_amount
+
+  def getBookedSeats(self):
+    return self._booked_seats
   
   
 

@@ -182,19 +182,196 @@ def main():
                 
                 user_input = input("\nPlease input following details separated by commas:\n1. Airline IATA Code\n2. Outbound Flight Number\n3. Return Flight Number(Optional)\n4. Origin Airport IATA Code\n5. Destination Airport IATA code\n6. Departure Date/Time eg. 5 Dec 22, 10:00 AM\n7. Flight Time eg. 6 hour 30 minute\n8. Stopover Duration eg. 3 hour\n9. Aircraft Type\n").strip().split(",")
 
-                if len(user_input) == 10 or len(user_input) == 9:
+                if len(user_input) == 10: #Includes Return Flight Number
+                    data_validated = cf.inputValidationforCreateFlight(user_input, airlines_list, aircraft_type_list, scheduled_flights)
+
+                    if data_validated == True:
+                        #Get Fare Amount input once data validation are done
+                        user_input_fare = input("\nPlease Input Fare Amount by Cabin Class separated by commas. Eg. Cabin Class F - $2000, Cabin Class J - $1000, Cabin Class Y - $500\n").strip().split(",")
+                        
+                        if len(user_input_fare) > 4:
+                            
+                            print("\nERROR: There should only be four or fewer Cabin Classes, Please try again\n")
+
+                        else:
+                            fare_amount = {}
+                            fare_error = False
+                            for i in range(0, len(user_input_fare)):
+                                temp = user_input_fare[i].strip().split("-")
+                                
+                                for j in range(0, len(temp)):
+                                    temp[j] = temp[j].strip()
+
+                                try:
+                                    repetition_error = False
+                                    if temp[0][-1] in list(fare_amount.keys()):
+                                        print("ERROR: Repetition of Cabin Class detected, Please try again\n")
+                                        repetition_error = True
+                                        raise ValueError
+
+                                    else:
+                                        fare_amount[temp[0][-1]] = int(temp[1][1:])
+                                
+                                except ValueError:
+                                    fare_error = True
+                                    if repetition_error == True:
+                                        pass
+                                    else:
+                                        print("\nERROR: Fare amount not in required format, Please try again\n")
+                                
+                                else:
+                                    continue
+                            
+                            if fare_error == False:
+                                flight_hours = user_input[7].strip().split(" ")
+                                stopover_hours = user_input[8].strip().split(" ")
+
+                                for i in range(0,len(flight_hours)):
+                                    flight_hours[i] = flight_hours[i].strip()
+            
+                                for i in range(0,len(stopover_hours)):
+                                    stopover_hours[i] = stopover_hours[i].strip()
+
+            
+                                flight_time = int(flight_hours[0]) + float(int(flight_hours[2])/60)
+                                stopover_time = float(stopover_hours[0])
+                                
+                                for items in aircraft_type_list:
+                                    if items.getName().lower() == user_input[9].lower():
+                                        aircraft = items
+                                        break
+                                
+
+                                scheduled_flights.append(cf.flights(user_input[0].upper(), int(user_input[1]),  user_input[3].upper(), user_input[4].upper(), user_input[5] , flight_time, stopover_time, aircraft, fare_amount, in_flight_no = int(user_input[2])))
+                                print("\nFlight successfully added to system!\n")
+
+                elif len(user_input) == 9: #Excludes Return Flight Number
                     
+                    data_validated = cf.inputValidationforCreateFlight(user_input, airlines_list, aircraft_type_list, scheduled_flights)
+                    
+                    if data_validated == True:
+                    
+                        #Get Fare Amount input once data validation are done
+                        user_input_fare = input("\nPlease Input Fare Amount by Cabin Class separated by commas. Eg. Cabin Class F - $2000, Cabin Class J - $1000, Cabin Class Y - $500\n").strip().split(",")
 
-                    #Get Fare Amount input once data validation are done
-                    user_input = input("\nPlease Input Fare Amount by Cabin Class separated by commas. Eg. Cabin Class F - $2000, Cabin Class J - $1000, Cabin Class Y - $500\n")
+                        if len(user_input_fare) > 4:
+                            
+                            print("\nERROR: There should only be four or fewer Cabin Classes, Please try again\n")
 
+                        else:
+                            fare_amount = {}
+                            fare_error = False
+                            for i in range(0, len(user_input_fare)):
+                                temp = user_input_fare[i].strip().split("-")
+                                
+                                for j in range(0, len(temp)):
+                                    temp[j] = temp[j].strip()
+
+                                try:
+                                    repetition_error = False
+                                    if temp[0][-1] in list(fare_amount.keys()):
+                                        print("ERROR: Repetition of Cabin Class detected, Please try again\n")
+                                        repetition_error = True
+                                        raise ValueError
+
+                                    else:
+                                        fare_amount[temp[0][-1]] = int(temp[1][1:])
+                                
+                                except ValueError:
+                                    fare_error = True
+                                    if repetition_error == True:
+                                        pass
+                                    else:
+                                        print("\nERROR: Fare amount not in required format, Please try again\n")
+                                
+                                else:
+                                    continue
+                            
+                            if fare_error == False:
+                                flight_hours = user_input[6].strip().split(" ")
+                                stopover_hours = user_input[7].strip().split(" ")
+
+                                for i in range(0,len(flight_hours)):
+                                    flight_hours[i] = flight_hours[i].strip()
+            
+                                for i in range(0,len(stopover_hours)):
+                                    stopover_hours[i] = stopover_hours[i].strip()
+
+            
+                                flight_time = int(flight_hours[0]) + float(int(flight_hours[2])/60)
+                                stopover_time = float(stopover_hours[0])
+                                
+                                for items in aircraft_type_list:
+                                    if items.getName().lower() == user_input[8].lower():
+                                        aircraft = items
+                                        break
+                                
+                                scheduled_flights.append(cf.flights(user_input[0].upper(), int(user_input[1]),  user_input[2].upper(), user_input[3].upper(), user_input[4] , flight_time, stopover_time, aircraft, fare_amount))
+                                print("\nFlight successfully added to system!\n")
 
                 else:                       
                     print("\nERROR: You have entered an invalid amount of inputs, Please try again")
 
 
+
+
+
             if user_input == "4": #Search and Book Flight
-                pass
+                
+                user_input = input("\nPlease provide Trip Details separated by commas:\n1. Trip Type (Return or One-Way)\n2. Origin IATA Code\n3. Destination IATA Code\n4. Departure Date (eg. 5 Dec 22)\n5. Cabin Class (F or J or W or Y or No Preference)\n6. No. of Passenger(s)\n").strip().split(",")
+
+                if len(user_input) != 6:
+
+                    print("\nERROR: You have entered an invalid amount of inputs, Please try again\n")
+
+                else:
+                    if user_input[0].lower() not in ["return", "one-way"]:
+                        print("\nERROR: You have entered an invalid input for Trip Type, Please try again\n")
+                    
+                    else:
+                        if user_input[4].lower() not in ["f", "j", "w", "y", "no preference"]:
+
+                            print("\nERROR: You have entered an invalid input for Cabin Class, Please try again\n")
+                        
+                        else:
+
+                            try:
+                                user_input[3] = dt.datetime.strptime(user_input[3], '%d %b %y')
+                                user_input[5] = int(user_input[5])
+                            
+                            except ValueError:
+                                print("\nERROR: You have entered an invalid input for either Departure Date or No. of Passenger(s), Please try again\n")
+                        
+                            else:
+                                one_day_before = user_input[3] - dt.timedelta(days=1)
+                                one_day_after = user_input[3] + dt.timedelta(days=1)
+                                list_of_matching_flights = []
+                                for flights in scheduled_flights:
+                                    if flights.getDepartureDateTime().date() == user_input[3].date() or flights.getDepartureDateTime().date() == one_day_before.date() or flights.getDepartureDateTime().date() == one_day_after.date():
+                                        if flights.getOrigin().upper() == user_input[1].upper() and flights.getDestination().upper() == user_input[2].upper():
+                                            list_of_matching_flights.append(flights)
+                                
+                                #Print available flights
+                                if len(list_of_matching_flights) == 0:
+                                    print("\nNo flights available based on Trip details provided\n")
+                                
+                                else:
+                                    if user_input[4] == "no preference":
+                                        count = 1
+                                        
+                                        for items in list_of_matching_flights:
+
+                                            print("Result {}:".format(count))
+                                            print()
+
+
+                                    else:
+
+                                        pass
+                                
+
+
+
 
 
         
