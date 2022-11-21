@@ -288,7 +288,7 @@ class aircraft_type:
   def setCabinStartandEnd(self, seat_start_end):
     self._cabin_start_end_rows = seat_start_end
 
-  def getSeatsLayout(self):
+  def getSeatsLayout(self): #Shows all the seats
     return self._seats_layout
 
 
@@ -296,7 +296,7 @@ class aircraft_type:
 #Flights Class
 
 class flights:
-  def __init__(self, IATA_code, out_flight_no,  origin_airport, destination_airport, dept_date_time, flight_hours, stopover_dur, aircarft_type, fare_amount, in_flight_no = None):
+  def __init__(self, IATA_code, out_flight_no,  origin_airport, destination_airport, dept_date_time, flight_hours, stopover_dur, aircraft_type, fare_amount, in_flight_no = None):
     self._IATA = IATA_code
     self._outbound = out_flight_no
     self._inbound = in_flight_no
@@ -306,9 +306,9 @@ class flights:
     self._flight_hours = flight_hours
     self._stopover_dur = stopover_dur
     self._fare_armount = fare_amount
-    self._aircraft_type = aircarft_type
-    self._booked_seats = []
-    
+    self._aircraft_type = aircraft_type
+    self._booked_seats = {}
+  
   
   def getIATA(self):
     return self._IATA
@@ -373,6 +373,27 @@ class flights:
 
   def getBookedSeats(self):
     return self._booked_seats
+
+  def updateBookedSeats(self, cabin_class, seat):
+    if cabin_class not in list(self.getBookedSeats().keys()):
+      self._booked_seats[cabin_class] = [seat.upper()]
+    else:
+      self._booked_seats[cabin_class].append(seat.upper())
+
+
+
+  def getSeatsAvailableonFlight(self):
+    if self._booked_seats == {}:
+      return self.getAircraftType().getSeatsLayout()
+
+    else:
+
+      remaining_seats = self.getAircraftType().getSeatsLayout()
+
+      for keys in list(self.getBookedSeats().keys()):
+        remaining_seats[keys.upper()].remove(self.getBookedSeats()[keys])
+
+      return remaining_seats
   
   
 
