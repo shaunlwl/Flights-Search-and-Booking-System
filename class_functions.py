@@ -377,6 +377,8 @@ class flights:
   def updateBookedSeats(self, cabin_class, seat):
     if cabin_class not in list(self.getBookedSeats().keys()):
       self._booked_seats[cabin_class] = [seat.upper()]
+      
+      
     else:
       self._booked_seats[cabin_class].append(seat.upper())
 
@@ -391,7 +393,13 @@ class flights:
       remaining_seats = self.getAircraftType().getSeatsLayout()
 
       for keys in list(self.getBookedSeats().keys()):
-        remaining_seats[keys.upper()].remove(self.getBookedSeats()[keys])
+        for items in self.getBookedSeats()[keys]:
+          try:
+            remaining_seats[keys.upper()].remove(items)
+          except ValueError:
+            continue
+
+      
 
       return remaining_seats
   
