@@ -42,7 +42,7 @@ def main():
                     
                     if airline_already_exist == False:
                         cf.createAirline(name.capitalize(), IATA_code.upper(), airlines_list)
-                        print("\n Airline created successfully!\n")
+                        print("\nAirline created successfully!\n")
 
 
         
@@ -89,7 +89,7 @@ def main():
                                     break
                                 
                                 else:
-                                    cabin_details = input("\nPlease enter Cabin Class details in this format:\nCabin Class , Seat Configuration, Starting Row Number, Ending Row Number(inclusive)\nY, 1-1-1 , 1 , 10\n").strip().split(",")
+                                    cabin_details = input("\nPlease enter Cabin Class details in this format:\nCabin Class [F,J,W or Y] , Seat Configuration, Starting Row Number, Ending Row Number(inclusive)\nY, 1-1-1 , 1 , 10\n").strip().split(",")
                                     
                                     if len(cabin_details) != 4:
                                         print("\nERROR: You have entered an invalid amount of inputs, Please try again")
@@ -189,9 +189,9 @@ def main():
                         #Get Fare Amount input once data validation are done
                         user_input_fare = input("\nPlease Input Fare Amount by Cabin Class separated by commas. Eg. Cabin Class F - $2000, Cabin Class J - $1000, Cabin Class Y - $500\n").strip().split(",")
                         
-                        if len(user_input_fare) > 4:
+                        if len(user_input_fare) > 4 or len(user_input_fare) < 1 :
                             
-                            print("\nERROR: There should only be four or fewer Cabin Classes, Please try again\n")
+                            print("\nERROR: There should only be four or fewer Cabin Classes (but at least one), Please try again\n")
 
                         else:
                             fare_amount = {}
@@ -199,28 +199,37 @@ def main():
                             for i in range(0, len(user_input_fare)):
                                 temp = user_input_fare[i].strip().split("-")
                                 
-                                for j in range(0, len(temp)):
-                                    temp[j] = temp[j].strip()
-
-                                try:
-                                    repetition_error = False
-                                    if temp[0][-1] in list(fare_amount.keys()):
-                                        print("ERROR: Repetition of Cabin Class detected, Please try again\n")
-                                        repetition_error = True
-                                        raise ValueError
-
-                                    else:
-                                        fare_amount[temp[0][-1]] = int(temp[1][1:])
-                                
-                                except ValueError:
+                                if len(temp) != 2:
+                                    print("\nERROR: Fare input not in required format, Please try again\n")
                                     fare_error = True
-                                    if repetition_error == True:
-                                        pass
-                                    else:
-                                        print("\nERROR: Fare amount not in required format, Please try again\n")
-                                
+                                    break
                                 else:
-                                    continue
+                                    for j in range(0, len(temp)):
+                                        temp[j] = temp[j].strip()
+
+                                    try:
+                                        repetition_error = False
+                                        if temp[0][-1].lower() in ['f', 'j', 'w', 'y']:
+                                            if temp[0][-1].upper() in list(fare_amount.keys()):
+                                                print("ERROR: Repetition of Cabin Class detected, Please try again\n")
+                                                repetition_error = True
+                                                raise ValueError
+
+                                            else:
+                                                fare_amount[temp[0][-1].upper()] = int(temp[1][1:])
+                                        else:
+                                            print("\nERROR: Expected Cabin Class are only F, J, W or Y or Fare input not in required format\n")
+                                            fare_error = True
+                                            break
+                                    except ValueError:
+                                        fare_error = True
+                                        if repetition_error == True:
+                                            pass
+                                        else:
+                                            print("\nERROR: Fare amount not in required format, Please try again\n")
+                                    
+                                    else:
+                                        continue
                             
                             if fare_error == False:
                                 flight_hours = user_input[7].strip().split(" ")
@@ -254,38 +263,48 @@ def main():
                         #Get Fare Amount input once data validation are done
                         user_input_fare = input("\nPlease Input Fare Amount by Cabin Class separated by commas. Eg. Cabin Class F - $2000, Cabin Class J - $1000, Cabin Class Y - $500\n").strip().split(",")
 
-                        if len(user_input_fare) > 4:
+                        if len(user_input_fare) > 4 or len(user_input_fare) < 1:
                             
-                            print("\nERROR: There should only be four or fewer Cabin Classes, Please try again\n")
+                            print("\nERROR: There should only be four or fewer Cabin Classes (but at least one), Please try again\n")
 
                         else:
                             fare_amount = {}
                             fare_error = False
                             for i in range(0, len(user_input_fare)):
                                 temp = user_input_fare[i].strip().split("-")
-                                
-                                for j in range(0, len(temp)):
-                                    temp[j] = temp[j].strip()
-
-                                try:
-                                    repetition_error = False
-                                    if temp[0][-1] in list(fare_amount.keys()):
-                                        print("ERROR: Repetition of Cabin Class detected, Please try again\n")
-                                        repetition_error = True
-                                        raise ValueError
-
-                                    else:
-                                        fare_amount[temp[0][-1]] = int(temp[1][1:])
-                                
-                                except ValueError:
+                                if len(temp) != 2:
+                                    print("\nERROR: Fare input not in required format, Please try again\n")
                                     fare_error = True
-                                    if repetition_error == True:
-                                        pass
-                                    else:
-                                        print("\nERROR: Fare amount not in required format, Please try again\n")
-                                
+                                    break
                                 else:
-                                    continue
+                                        
+                                    for j in range(0, len(temp)):
+                                        temp[j] = temp[j].strip()
+
+                                    try:
+                                        repetition_error = False
+                                        if temp[0][-1].lower() in ['f', 'j', 'w', 'y']:
+                                            if temp[0][-1].upper() in list(fare_amount.keys()):
+                                                print("ERROR: Repetition of Cabin Class detected, Please try again\n")
+                                                repetition_error = True
+                                                raise ValueError
+
+                                            else:
+                                                fare_amount[temp[0][-1].upper()] = int(temp[1][1:])
+                                        else:
+                                            print("\nERROR: Expected Cabin Class are only F, J, W or Y or Fare input not in required format\n")
+                                            fare_error = True
+                                            break
+
+                                    except ValueError:
+                                        fare_error = True
+                                        if repetition_error == True:
+                                            pass
+                                        else:
+                                            print("\nERROR: Fare amount not in required format, Please try again\n")
+                                    
+                                    else:
+                                        continue
                             
                             if fare_error == False:
                                 flight_hours = user_input[6].strip().split(" ")
