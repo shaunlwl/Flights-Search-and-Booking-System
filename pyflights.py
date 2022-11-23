@@ -448,9 +448,11 @@ def main():
                                                 except KeyError:
                                                     continue
 
-                                        if print_count != 1:
-                                            no_seats_available_on_direct = True
+                                            if print_count != 1:
+                                                no_seats_available_on_direct = True
 
+                                        else:
+                                            no_seats_available_on_direct = True
                                         
                                         if len(pair_of_flights) != 0:
                                             flights_with_seats_on_connecting = []
@@ -495,6 +497,10 @@ def main():
                                             if print_count != 2:
                                                 no_seats_available_on_connecting = True
 
+
+                                        else:
+                                            no_seats_available_on_connecting = True        
+
                                         if no_seats_available_on_direct == True and no_seats_available_on_connecting == True:
                                             print("\nNo flights available based on Trip details provided\n")
                                             no_seats_at_all = True
@@ -518,9 +524,11 @@ def main():
                                                 except KeyError:
                                                     continue
                                                     
-                                        if print_count != 1:
-                                            no_seats_available_on_direct = True
+                                            if print_count != 1:
+                                                no_seats_available_on_direct = True
 
+                                        else:
+                                            no_seats_available_on_direct = True
 
                                         if len(pair_of_flights) != 0:
                                             flights_with_seats_on_connecting = []
@@ -560,6 +568,9 @@ def main():
                                             if print_count != 2:
                                                 no_seats_available_on_connecting = True
 
+                                        else:
+                                            no_seats_available_on_connecting = True            
+
                                         if no_seats_available_on_direct == True and no_seats_available_on_connecting == True:
                                             print("\nNo flights available on Cabin Class F based on Trip details provided\n")
                                             no_seats_at_all = True
@@ -581,9 +592,11 @@ def main():
                                                 except KeyError:
                                                     continue
 
-                                        if print_count != 1:
-                                            no_seats_available_on_direct = True
+                                            if print_count != 1:
+                                                no_seats_available_on_direct = True
 
+                                        else:
+                                            no_seats_available_on_direct = True
 
                                         if len(pair_of_flights) != 0:
                                             flights_with_seats_on_connecting = []
@@ -622,6 +635,9 @@ def main():
                                             if print_count != 2:
                                                 no_seats_available_on_connecting = True
 
+                                        else:
+                                            no_seats_available_on_connecting = True                             
+
                                         if no_seats_available_on_direct == True and no_seats_available_on_connecting == True:
                                             print("\nNo flights available on Cabin Class J based on Trip details provided\n")
                                             no_seats_at_all = True
@@ -646,7 +662,9 @@ def main():
                                                 except KeyError:
                                                     continue
 
-                                        if print_count != 1:
+                                            if print_count != 1:
+                                                no_seats_available_on_direct = True
+                                        else:
                                             no_seats_available_on_direct = True
 
                                         if len(pair_of_flights) != 0:
@@ -686,6 +704,9 @@ def main():
                                             if print_count != 2:
                                                 no_seats_available_on_connecting = True
 
+                                        else:
+                                            no_seats_available_on_connecting = True
+
                                         if no_seats_available_on_direct == True and no_seats_available_on_connecting == True:
                                             print("\nNo flights available on Cabin Class W based on Trip details provided\n")
                                             no_seats_at_all = True
@@ -708,9 +729,11 @@ def main():
                                                 except KeyError:
                                                     continue
 
-                                        if print_count != 1:
-                                            no_seats_available_on_direct = True
+                                            if print_count != 1:
+                                                no_seats_available_on_direct = True
 
+                                        else:
+                                            no_seats_available_on_direct = True
                                         
                                         if len(pair_of_flights) != 0:
                                             flights_with_seats_on_connecting = []
@@ -749,6 +772,9 @@ def main():
                                             if print_count != 2:
                                                 no_seats_available_on_connecting = True
 
+                                        else:
+                                            no_seats_available_on_connecting = True
+
                                         if no_seats_available_on_direct == True and no_seats_available_on_connecting == True:
                                             print("\nNo flights available on Cabin Class Y based on Trip details provided\n")
                                             no_seats_at_all = True
@@ -761,7 +787,7 @@ def main():
                                                 break
 
                                             elif user_input == "y":
-                                                user_input = input("Which available flight do you want to book? Please key in Result no. (eg. Result 1)\n").lower()
+                                                user_input = input("Which available flight do you want to book? Please key in Result no. (eg. Result 1)\n").lower().strip()
 
                                                 if user_input not in list(results_dict.keys()):
                                                     print("You have selected an invalid result")
