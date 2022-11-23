@@ -216,7 +216,11 @@ def main():
                                                 raise ValueError
 
                                             else:
-                                                fare_amount[temp[0][-1].upper()] = int(temp[1][1:])
+                                                try:
+                                                    fare_amount[temp[0][-1].upper()] = int(temp[1][1:])
+                                                except ValueError:
+                                                    print("\nERROR: Fare not in numeric digits\n")
+                                                    fare_error = True
                                         else:
                                             print("\nERROR: Expected Cabin Class are only F, J, W or Y or Fare input not in required format\n")
                                             fare_error = True
@@ -290,7 +294,11 @@ def main():
                                                 raise ValueError
 
                                             else:
-                                                fare_amount[temp[0][-1].upper()] = int(temp[1][1:])
+                                                try:
+                                                    fare_amount[temp[0][-1].upper()] = int(temp[1][1:])
+                                                except ValueError:
+                                                    print("\nERROR: Fare not in numeric digits\n")
+                                                    fare_error = True
                                         else:
                                             print("\nERROR: Expected Cabin Class are only F, J, W or Y or Fare input not in required format\n")
                                             fare_error = True
@@ -420,6 +428,7 @@ def main():
                                     no_seats_available_on_direct = False
                                     no_seats_available_on_connecting = False
                                     results_dict = {}
+                                    print_count = 0
                                     if user_input[4].lower() == "no preference":
                                         
                                         if len(list_of_matching_direct_flights) != 0:
@@ -477,8 +486,13 @@ def main():
                                                             arrival_datetime = flights.getDepartureDateTime() + dt.timedelta(hours = flights.getFlightHours())
                                                             print("{}{}, {} to {}, Depart {},\nArrive {}, Class {} Fare: ${}".format(flights.getIATA(), flights.getOutbound(), flights.getOrigin() , flights.getDestination(), departure_datetime.strftime('%d %b %y, %I:%M %p'),arrival_datetime.strftime('%d %b %y, %I:%M %p'), items[1],flights.getFareAmount()[items[1]]))
                                                             total_fare += flights.getFareAmount()[items[1]]
+                                                            print_count = 2
                                                     print("1 stopover, Total Fare ${}".format(user_input[5] * total_fare))    
                                             else:
+                                                no_seats_available_on_connecting = True
+
+
+                                            if print_count != 2:
                                                 no_seats_available_on_connecting = True
 
                                         if no_seats_available_on_direct == True and no_seats_available_on_connecting == True:
@@ -538,10 +552,13 @@ def main():
                                                             arrival_datetime = flights.getDepartureDateTime() + dt.timedelta(hours = flights.getFlightHours())
                                                             print("{}{}, {} to {}, Depart {},\nArrive {}, Class F Fare:${}".format(flights.getIATA(), flights.getOutbound(), flights.getOrigin() , flights.getDestination(), departure_datetime.strftime('%d %b %y, %I:%M %p'),arrival_datetime.strftime('%d %b %y, %I:%M %p'), flights.getFareAmount()["F"]))
                                                             total_fare += flights.getFareAmount()["F"]
+                                                            print_count = 2
                                                     print("1 stopover, Total Fare $ {}".format(user_input[5] * total_fare))           
                                             else:
                                                 no_seats_available_on_connecting = True
 
+                                            if print_count != 2:
+                                                no_seats_available_on_connecting = True
 
                                         if no_seats_available_on_direct == True and no_seats_available_on_connecting == True:
                                             print("\nNo flights available on Cabin Class F based on Trip details provided\n")
@@ -597,10 +614,13 @@ def main():
                                                             arrival_datetime = flights.getDepartureDateTime() + dt.timedelta(hours = flights.getFlightHours())
                                                             print("{}{}, {} to {}, Depart {},\nArrive {}, Class J Fare:${}".format(flights.getIATA(), flights.getOutbound(), flights.getOrigin() , flights.getDestination(), departure_datetime.strftime('%d %b %y, %I:%M %p'),arrival_datetime.strftime('%d %b %y, %I:%M %p'), flights.getFareAmount()["J"]))
                                                             total_fare += flights.getFareAmount()["J"]
+                                                            print_count = 2
                                                     print("1 stopover, Total Fare $ {}".format(user_input[5] * total_fare))           
                                             else:
                                                 no_seats_available_on_connecting = True
 
+                                            if print_count != 2:
+                                                no_seats_available_on_connecting = True
 
                                         if no_seats_available_on_direct == True and no_seats_available_on_connecting == True:
                                             print("\nNo flights available on Cabin Class J based on Trip details provided\n")
@@ -657,10 +677,14 @@ def main():
                                                             arrival_datetime = flights.getDepartureDateTime() + dt.timedelta(hours = flights.getFlightHours())
                                                             print("{}{}, {} to {}, Depart {},\nArrive {}, Class W Fare:${}".format(flights.getIATA(), flights.getOutbound(), flights.getOrigin() , flights.getDestination(), departure_datetime.strftime('%d %b %y, %I:%M %p'),arrival_datetime.strftime('%d %b %y, %I:%M %p'), flights.getFareAmount()["W"]))
                                                             total_fare += flights.getFareAmount()["W"]
+                                                            print_count = 2
+
                                                     print("1 stopover, Total Fare $ {}".format(user_input[5] * total_fare))           
                                             else:
                                                 no_seats_available_on_connecting = True
 
+                                            if print_count != 2:
+                                                no_seats_available_on_connecting = True
 
                                         if no_seats_available_on_direct == True and no_seats_available_on_connecting == True:
                                             print("\nNo flights available on Cabin Class W based on Trip details provided\n")
@@ -717,8 +741,12 @@ def main():
                                                             arrival_datetime = flights.getDepartureDateTime() + dt.timedelta(hours = flights.getFlightHours())
                                                             print("{}{}, {} to {}, Depart {},\nArrive {}, Class Y Fare: ${}".format(flights.getIATA(), flights.getOutbound(), flights.getOrigin() , flights.getDestination(), departure_datetime.strftime('%d %b %y, %I:%M %p'),arrival_datetime.strftime('%d %b %y, %I:%M %p'), flights.getFareAmount()["Y"]))
                                                             total_fare += flights.getFareAmount()["Y"]
+                                                            print_count = 2
                                                     print("1 stopover, Total Fare ${}".format(user_input[5] * total_fare))    
                                             else:
+                                                no_seats_available_on_connecting = True
+
+                                            if print_count != 2:
                                                 no_seats_available_on_connecting = True
 
                                         if no_seats_available_on_direct == True and no_seats_available_on_connecting == True:
@@ -739,13 +767,24 @@ def main():
                                                     print("You have selected an invalid result")
                                                 
                                                 else:
-                                                    print("These are the available seats on the flight:")
+                                                    print("This is the seats layout on the flight:")
                                                     if isinstance(results_dict[user_input][0], cf.flights):
                                                         print(results_dict[user_input][0].getSeatsAvailableonFlight()[results_dict[user_input][1]])
+                                                        try:
+                                                            if len(results_dict[user_input][0].getBookedSeats()[results_dict[user_input][1]]) !=0:
+                                                                print("Seats that are already booked are {}".format(results_dict[user_input][0].getBookedSeats()[results_dict[user_input][1]]))
+                                                        except KeyError:
+                                                            pass
                                                     else:
                                                         for i in range(0, len(results_dict[user_input][0])):
-                                                            print("Seats available on Flight {}, {}{}".format(i+1,results_dict[user_input][0][i].getIATA().upper(), results_dict[user_input][0][i].getOutbound()))
+                                                            print("Seats layout on Flight {}, {}{}".format(i+1,results_dict[user_input][0][i].getIATA().upper(), results_dict[user_input][0][i].getOutbound()))
                                                             print(results_dict[user_input][0][i].getSeatsAvailableonFlight()[results_dict[user_input][1]])
+                                                            try:
+                                                                if len(results_dict[user_input][0][i].getBookedSeats()[results_dict[user_input][1]]) !=0:
+                                                                    print("Seats that are already booked are {}".format(results_dict[user_input][0][i].getBookedSeats()[results_dict[user_input][1]]))
+                                                            except KeyError:
+                                                                pass
+
 
                                                     passenger_count = 0
                                                     if isinstance(results_dict[user_input][0], cf.flights):
@@ -776,7 +815,7 @@ def main():
                                                                 while True:
                                                                     user_input_seats = input("\nPlease select seat for Passenger {}\n".format(passenger_count)).upper()
                                                                     if user_input_seats.upper() not in results_dict[user_input][0][i].getSeatsAvailableonFlight()[results_dict[user_input][1]]:
-                                                                        print("\nSeat chosen is not part of seat layout or Seat has already been booked by another passenger\n")
+                                                                        print("\nSeat chosen is not part of seat layout\n")
                                                                         continue
                                                                     else:
                                                                         if results_dict[user_input][1] not in list(results_dict[user_input][0][i].getBookedSeats().keys()):

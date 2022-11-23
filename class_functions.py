@@ -382,26 +382,9 @@ class flights:
     else:
       self._booked_seats[cabin_class].append(seat.upper())
 
-
-
   def getSeatsAvailableonFlight(self):
-    if self._booked_seats == {}:
-      return self.getAircraftType().getSeatsLayout()
+    return self.getAircraftType().getSeatsLayout()
 
-    else:
-
-      remaining_seats = self.getAircraftType().getSeatsLayout()
-
-      for keys in list(self.getBookedSeats().keys()):
-        for items in self.getBookedSeats()[keys]:
-          try:
-            remaining_seats[keys.upper()].remove(items)
-          except ValueError:
-            continue
-
-      
-
-      return remaining_seats
   
-  
+
 
